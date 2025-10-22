@@ -1,0 +1,120 @@
+---
+alwaysApply: false
+description: Git commit message standards
+---
+# Git Commit Message Standards
+
+When generating git commit messages, follow these strict formatting rules and type definitions.
+
+## Commit Message Format
+
+```
+[{GIT_COMMIT_TYPE}.upper()] {GIT_COMMIT_MESSAGE}.capitalize()
+```
+
+- **Type**: Must be uppercase
+- **Message**: Must be capitalized and start with a verb in base form
+- **Language**: All commit messages must be in English
+
+## Commit Types
+
+### **FEAT** - New Features
+- **Usage**: Adding or modifying functionality
+- **Example**: `[FEAT] Setup user authentication system`
+- **Example**: `[FEAT] Implement file upload feature`
+
+### **FIX** - Bug Fixes
+- **Usage**: Fixing bugs or issues
+- **Example**: `[FIX] Resolve memory leak in checkpoint system`
+- **Example**: `[FIX] Handle null pointer exception in tool manager`
+
+### **DOCS** - Documentation
+- **Usage**: Documentation changes only
+- **Template**: `[DOCS] Update {filename}` for existing files
+- **Example**: `[DOCS] Update README.md`
+- **Example**: `[DOCS] Setup requirements.txt` (for new files)
+
+### **STYLE** - Code Style
+- **Usage**: Formatting, whitespace, missing semicolons (no logic changes)
+- **Example**: `[STYLE] Format code with black formatter`
+- **Example**: `[STYLE] Fix indentation in agent module`
+
+### **REFACTOR** - Code Refactoring
+- **Usage**: Code restructuring without adding features or fixing bugs
+- **Example**: `[REFACTOR] Extract tool validation logic`
+- **Example**: `[REFACTOR] Simplify checkpoint creation flow`
+
+### **PERF** - Performance Improvements
+- **Usage**: Code changes that improve performance
+- **Example**: `[PERF] Optimize file search algorithm`
+- **Example**: `[PERF] Cache tool descriptions for faster loading`
+
+### **TEST** - Testing
+- **Usage**: Adding missing tests or test improvements
+- **Example**: `[TEST] Add unit tests for tool manager`
+- **Example**: `[TEST] Improve test coverage for agent module`
+
+### **CHORE** - Maintenance
+- **Usage**: Build process, auxiliary tools, maintenance tasks
+- **Template**: `[CHORE] Remove unused {type}` for cleanup tasks
+- **Example**: `[CHORE] Remove unused comments from pyproject.toml`
+- **Example**: `[CHORE] Remove unused code`
+- **Example**: `[CHORE] Remove unused debug code`
+
+### **REVERT** - Revert Changes
+- **Usage**: Reverting previous commits
+- **Format**: `[REVERT] type(scope): subject (revert version: xxxx)`
+- **Example**: `[REVERT] feat: add user auth (revert version: abc1234)`
+
+## Message Writing Rules
+
+### 1. **Start with Verb Base Form**
+- ✅ `Setup`, `Fix`, `Update`, `Remove`, `Implement`
+- ❌ `Adding`, `Fixed`, `Updates`, `Removed`
+- **Personal Preferences**:
+  - Use `Setup` instead of `Add` for initial feature/module creation
+  - Use `Remove unused {type}` for cleanup tasks
+
+### 2. **Use Present Tense**
+- ✅ `[FIX] Handle timeout errors in API requests`
+- ❌ `[FIX] Handled timeout errors in API requests`
+
+### 4. **Keep Under 72 Characters**
+- Aim for concise but descriptive messages
+- Focus on the most important change
+
+### 5. **English Only**
+- All commit messages must be in English
+- Follow the project's English-only code policy
+
+## Commit Message Generation Process
+
+When analyzing code diffs to generate commit messages:
+
+1. **Identify the primary change type** based on the diff content
+2. **Determine the main component** being modified (agent, tools, config, etc.)
+3. **Choose appropriate action verb** (add, fix, update, remove, etc.)
+4. **Write concise description** focusing on the most significant change
+5. **Format according to the standard**: `[TYPE] Verb description`
+
+## Reference Past Commit Messages
+
+When the project's commit message style is unknown or uncertain, **actively reference past commits** to understand established patterns:
+
+1. **Check recent commits**: `git log --oneline -10`
+2. **Identify patterns**: Look for commit types, formatting, and verb choices
+3. **Adapt to existing style**: Follow the project's established patterns
+4. **Fallback**: Use this standard if no clear pattern exists
+
+This ensures consistency with the project's existing commit history.
+
+## Output Preference
+
+**Generate message only**: Provide the formatted commit message for manual copying and committing. Do not execute git commands automatically.
+
+**Example output format**:
+```
+[FEAT] Setup user authentication system
+```
+
+This standard ensures consistent, readable, and informative commit history throughout the project.

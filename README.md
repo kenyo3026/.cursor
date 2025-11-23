@@ -34,6 +34,23 @@ English-only policy for all code:
 - Variable and function names in English
 - No non-English characters in code blocks
 
+### ⚖️ [license-initialization.mdc](./rules/license-initialization.mdc)
+**License Initialization Policy**
+
+Never initialize or specify license information unless explicitly requested:
+- Do not add license to README.md, pyproject.toml, or other config files
+- Do not create LICENSE files automatically
+- Wait for explicit user instruction before adding any license information
+
+### 📋 [cursor-rule-style.mdc](./rules/cursor-rule-style.mdc)
+**Cursor Rule Writing Style**
+
+Standards for creating cursor rule files:
+- Keep rules concise and focused
+- Avoid lengthy explanations or verbose instructions
+- Match the length and style of existing rules
+- Reference existing rules as style examples
+
 ## Usage
 
 These rules are automatically applied by Cursor AI when:
@@ -68,8 +85,10 @@ When adding or modifying rules:
 ├── README.md                    # This file
 └── rules/
     ├── coding-mics.mdc         # Language standards
+    ├── cursor-rule-style.mdc   # Rule writing style standards
     ├── git-commit-standards.mdc # Commit message rules
-    └── incremental-development.mdc # Development approach
+    ├── incremental-development.mdc # Development approach
+    └── license-initialization.mdc # License initialization policy
 ```
 
 ## Best Practices

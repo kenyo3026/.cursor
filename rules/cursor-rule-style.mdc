@@ -1,0 +1,42 @@
+---
+alwaysApply: false
+description: Cursor rule files standards
+---
+
+# Cursor Rule Writing Style
+
+## Core Principle
+
+**Keep cursor rules concise and focused. Avoid lengthy explanations or verbose instructions.**
+
+## Style Guidelines
+
+### Length and Structure
+- Keep rules brief and to the point
+- Use clear headings and bullet points
+- Focus on essential information only
+- Match the length and style of existing rules in this directory
+
+### Content Organization
+- Start with core principle or main rule
+- Use sections for different aspects if needed
+- Include brief examples (❌ Avoid / ✅ Correct) when helpful
+- Avoid redundant explanations or background information
+
+### Writing Standards
+- Be direct and actionable
+- Use simple, clear language
+- Remove unnecessary elaboration
+- Each rule should be self-contained and scannable
+
+## Examples
+
+**❌ Avoid**: Long paragraphs explaining context, history, or detailed rationale
+**❌ Avoid**: Multiple nested sections with extensive explanations
+**❌ Avoid**: Repeating the same information in different ways
+
+**✅ Correct**: Concise rules that get straight to the point
+**✅ Correct**: Clear structure with essential information only
+**✅ Correct**: Brief examples that illustrate the rule
+
+When creating new cursor rules, reference existing rules in this directory as style examples.

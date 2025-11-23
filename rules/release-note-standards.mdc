@@ -1,5 +1,6 @@
 ---
 alwaysApply: false
+description: Release note generation standards and format
 ---
 # Release Note Generation Rules
 

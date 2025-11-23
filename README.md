@@ -34,6 +34,15 @@ English-only policy for all code:
 - Variable and function names in English
 - No non-English characters in code blocks
 
+### 📦 [release-note-standards.mdc](./rules/release-note-standards.mdc)
+**Release Note Generation Standards**
+
+Standards for generating release notes:
+- **Format**: `v{VERSION} - {EMOJI} {Main Feature or Improvement Title}`
+- **Structure**: Feature Highlights, Statistics, Quick Start sections
+- **Process**: Analyze commits, categorize changes, generate formatted notes
+- **File Naming**: `RELEASE_NOTES_{VERSION}.md`
+
 ### ⚖️ [license-initialization.mdc](./rules/license-initialization.mdc)
 **License Initialization Policy**
 
@@ -88,7 +97,8 @@ When adding or modifying rules:
     ├── cursor-rule-style.mdc   # Rule writing style standards
     ├── git-commit-standards.mdc # Commit message rules
     ├── incremental-development.mdc # Development approach
-    └── license-initialization.mdc # License initialization policy
+    ├── license-initialization.mdc # License initialization policy
+    └── release-note-standards.mdc # Release note generation standards
 ```
 
 ## Best Practices

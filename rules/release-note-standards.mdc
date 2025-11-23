@@ -1,0 +1,98 @@
+---
+alwaysApply: false
+---
+# Release Note Generation Rules
+
+## Release Note Format and Structure
+
+When generating release notes, follow this exact format and structure:
+
+### Title Format
+```
+v{VERSION} - {EMOJI} {Main Feature or Improvement Title}
+```
+
+Example:
+- `v0.0.3 - 🚀 Enhanced RAG System with Collection Upload and Improved Chunking Strategy`
+- `v0.0.4-preview.1 - 🔧 Enhanced Configuration Flexibility and Improved Model Serving Capabilities to Support Reasoning Models (e.g., GPT-OSS-20B)`
+
+### Release Notes Section Structure
+
+1. **Feature Highlights** (in order of importance):
+   - Use bullet points with bold feature names
+   - Each feature should have a clear, concise description
+   - Group related features together
+   - Use appropriate emojis in section titles (📝 for Release Notes, 📈 for Statistics, 🚀 for Quick Start)
+
+2. **Statistics Section**:
+   - Format: `**📈 Statistics**: {X} files changed, {Y} insertions(+), {Z} deletions(-)`
+   - Get statistics using: `git diff {previous_tag}..{current_tag} --shortstat`
+
+3. **Quick Start Section**:
+   - Always include the Quick Start section with the same structure
+   - Include configuration setup instructions
+   - Include backend and frontend installation/execution steps
+   - Include monitoring commands for Windows and Linux/macOS
+
+### Content Guidelines
+
+1. **Feature Descriptions**:
+   - Start with action verbs (Implemented, Enhanced, Refactored, Added, Fixed, etc.)
+   - Be specific about what was changed
+   - Mention user-facing benefits when applicable
+   - Group fixes and improvements logically
+
+2. **Categorization**:
+   - **Major Features**: New functionality, significant enhancements
+   - **Improvements**: Enhancements to existing features
+   - **Bug Fixes**: Fixes for reported issues
+   - **Configuration**: Changes to configuration or settings
+   - **Performance**: Performance optimizations
+   - **Documentation**: Documentation updates
+
+3. **Language Style**:
+   - Use present tense for descriptions
+   - Be concise but informative
+   - Use professional but friendly tone
+   - Avoid jargon unless necessary
+
+### Generating Release Notes Process
+
+1. **Get Commit History**:
+   ```bash
+   git log {previous_tag}..{current_tag} --pretty=format:"%h - %s (%an, %ar)" --reverse
+   ```
+
+2. **Get Statistics**:
+   ```bash
+   git diff {previous_tag}..{current_tag} --shortstat
+   git diff {previous_tag}..{current_tag} --stat
+   ```
+
+3. **Analyze Commits**:
+   - Group commits by type (FEAT, FIX, REFACTOR, CHORE, etc.)
+   - Identify major features and improvements
+   - Note breaking changes if any
+   - Identify bug fixes
+
+4. **Write Release Notes**:
+   - Start with the most important features
+   - Group related changes together
+   - Use consistent formatting
+   - Include all relevant improvements and fixes
+
+### File Naming Convention
+
+Release notes should be saved as:
+- `RELEASE_NOTES_{VERSION}.md`
+- Example: `RELEASE_NOTES_v0.0.3.md`, `RELEASE_NOTES_v0.0.4-preview.1.md`
+
+### When User Requests Release Note Generation
+
+1. Ask for or identify the version tags (previous and current)
+2. Run git commands to get commit history and statistics
+3. Analyze commits and categorize them
+4. Generate release note following the format above
+5. Save to appropriate file name
+6. Review for grammar and consistency
+

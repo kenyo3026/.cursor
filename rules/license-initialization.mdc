@@ -1,0 +1,36 @@
+---
+alwaysApply: true
+description: License initialization policy for new projects
+---
+
+# License Initialization Policy
+
+## Core Principle
+
+**Never initialize or specify a license in any project files unless explicitly requested by the author.**
+
+## Rules
+
+### Prohibited Actions
+
+- **Do NOT** add license information to `README.md` files
+- **Do NOT** specify license in `pyproject.toml`, `package.json`, `Cargo.toml`, or other project configuration files
+- **Do NOT** create `LICENSE` files automatically
+- **Do NOT** assume or default to any license (including MIT, Apache, GPL, etc.)
+
+### When License Can Be Added
+
+Only add license information when:
+- The author explicitly requests a specific license
+- The author clearly indicates which license to use
+- The author asks to initialize license information
+
+## Examples
+
+**❌ Avoid**: Adding `license = "MIT"` to `pyproject.toml` during initial project setup
+**❌ Avoid**: Creating a LICENSE file with MIT text without user request
+**❌ Avoid**: Adding license badges or text to README.md automatically
+
+**✅ Correct**: Wait for explicit user instruction before adding any license information
+
+This policy ensures the author maintains full control over their project's licensing decisions.

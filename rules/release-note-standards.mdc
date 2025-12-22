@@ -9,53 +9,73 @@ description: Release note generation standards and format
 When generating release notes, follow this exact format and structure:
 
 ### Title Format
-```
-v{VERSION} - {EMOJI} {Main Feature or Improvement Title}
+```markdown
+# v{VERSION} - {EMOJI} {Main Feature or Improvement Title}
 ```
 
 Example:
-- `v0.0.3 - 🚀 Enhanced RAG System with Collection Upload and Improved Chunking Strategy`
-- `v0.0.4-preview.1 - 🔧 Enhanced Configuration Flexibility and Improved Model Serving Capabilities to Support Reasoning Models (e.g., GPT-OSS-20B)`
+- `# v0.1.0 - 🚀 Initial Release`
+- `# v0.2.0 - 🔧 Enhanced Configuration Management`
 
 ### Release Notes Section Structure
 
-1. **Feature Highlights** (in order of importance):
-   - Use bullet points with bold feature names
-   - Each feature should have a clear, concise description
-   - Group related features together
-   - Use appropriate emojis in section titles (📝 for Release Notes, 📈 for Statistics, 🚀 for Quick Start)
+1. **Main Title** (H1):
+   ```markdown
+   # v{VERSION} - {EMOJI} {Title}
+   ```
 
-2. **Statistics Section**:
-   - Format: `**📈 Statistics**: {X} files changed, {Y} insertions(+), {Z} deletions(-)`
-   - Get statistics using: `git diff {previous_tag}..{current_tag} --shortstat`
+2. **Release Notes Section** (H2):
+   ```markdown
+   ## 📝 Release Notes
+   ```
 
-3. **Quick Start Section**:
-   - Always include the Quick Start section with the same structure
-   - Include configuration setup instructions
-   - Include backend and frontend installation/execution steps
-   - Include monitoring commands for Windows and Linux/macOS
+3. **Brief Description**:
+   - One concise paragraph describing the release
+   - Focus on the main purpose or achievement
+
+4. **Core Features Section** (H3):
+   ```markdown
+   ### ✨ Core Features
+   ```
+   - Use bullet points with emoji and bold feature names
+   - Format: `- **{EMOJI} {Feature Name}**: {Brief description}`
+   - Each feature should be concise and user-focused
+   - Group related features logically
+
+5. **Technical Highlights Section** (H3):
+   ```markdown
+   ### 🔧 Technical Highlights
+   ```
+   - Focus on technical improvements and architecture
+   - Use bullet points without emoji in feature names
+   - Format: `- {Technical detail or improvement}`
+   - Keep descriptions concise and technical
 
 ### Content Guidelines
 
 1. **Feature Descriptions**:
-   - Start with action verbs (Implemented, Enhanced, Refactored, Added, Fixed, etc.)
-   - Be specific about what was changed
-   - Mention user-facing benefits when applicable
-   - Group fixes and improvements logically
+   - Keep descriptions concise and focused
+   - Use present tense
+   - Focus on user-facing benefits for Core Features
+   - Focus on technical details for Technical Highlights
+   - Avoid verbose explanations
 
-2. **Categorization**:
-   - **Major Features**: New functionality, significant enhancements
-   - **Improvements**: Enhancements to existing features
-   - **Bug Fixes**: Fixes for reported issues
-   - **Configuration**: Changes to configuration or settings
-   - **Performance**: Performance optimizations
-   - **Documentation**: Documentation updates
+2. **Emoji Usage**:
+   - Use emojis in Core Features section for visual appeal
+   - Common emojis: 🤖 (AI/Agent), 💾 (Storage), ⚙️ (Config), 🛠️ (Tools), 🌐 (Network), 🎨 (UI/Output), 📦 (Packages)
+   - Do not use emojis in Technical Highlights section
 
 3. **Language Style**:
-   - Use present tense for descriptions
-   - Be concise but informative
+   - Be concise and informative
    - Use professional but friendly tone
    - Avoid jargon unless necessary
+   - Keep each bullet point to one line when possible
+
+4. **Structure Principles**:
+   - Keep release notes brief and scannable
+   - Focus on what matters most to users
+   - Avoid redundant information
+   - Do not include Statistics, Quick Start, or Thank You sections unless specifically requested
 
 ### Generating Release Notes Process
 
@@ -85,15 +105,42 @@ Example:
 ### File Naming Convention
 
 Release notes should be saved as:
-- `RELEASE_NOTES_{VERSION}.md`
-- Example: `RELEASE_NOTES_v0.0.3.md`, `RELEASE_NOTES_v0.0.4-preview.1.md`
+- `release-note.md` (for current/latest release)
+- Or `RELEASE_NOTES_{VERSION}.md` (for version-specific files)
+- Example: `release-note.md`, `RELEASE_NOTES_v0.1.0.md`
 
 ### When User Requests Release Note Generation
 
-1. Ask for or identify the version tags (previous and current)
-2. Run git commands to get commit history and statistics
+1. Ask for or identify the version tag or commit hash
+2. Run git commands to get commit history (optional, for reference)
 3. Analyze commits and categorize them
-4. Generate release note following the format above
-5. Save to appropriate file name
-6. Review for grammar and consistency
+4. Generate release note following the format above:
+   - Start with H1 title: `# v{VERSION} - {EMOJI} {Title}`
+   - Add H2: `## 📝 Release Notes`
+   - Add brief description paragraph
+   - Add `### ✨ Core Features` section
+   - Add `### 🔧 Technical Highlights` section
+5. Keep it concise - avoid verbose descriptions
+6. Save to `release-note.md` or version-specific file
+7. Review for grammar and consistency
+
+### Example Template
+
+```markdown
+# v{VERSION} - {EMOJI} {Title}
+
+## 📝 Release Notes
+
+{Brief one-paragraph description of the release}
+
+### ✨ Core Features
+
+- **{EMOJI} {Feature Name}**: {Brief description}
+- **{EMOJI} {Feature Name}**: {Brief description}
+
+### 🔧 Technical Highlights
+
+- {Technical improvement or detail}
+- {Technical improvement or detail}
+```
 

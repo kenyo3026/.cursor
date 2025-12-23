@@ -29,14 +29,44 @@ description: Cursor rule files standards
 - Remove unnecessary elaboration
 - Each rule should be self-contained and scannable
 
+## Markdown File Usage
+
+### Core Principle
+**Prioritize direct responses over creating markdown files. Use markdown files only when necessary or explicitly requested.**
+
+### Guidelines
+- **Default**: Provide direct answers and explanations in conversation
+- **When content is long**: Summarize core points first, then expand if needed
+- **Avoid**: Automatically creating markdown files for discussions, analysis, or explanations
+- **When markdown might be appropriate**:
+  1. First provide key information and core points in conversation
+  2. Then ask user if they want detailed information written to a markdown file
+  3. Only create markdown after user confirms
+- **Create markdown directly only when**:
+  - User explicitly requests documentation
+  - Complex configuration files or code structures need to be created
+  - User asks to "write to file" or "create documentation"
+
+### Communication Style
+- Be direct and concise in responses
+- Focus on core points first
+- Expand details only when necessary
+- Avoid token-heavy verbose explanations
+- Let users digest information in conversation, not by reading separate files
+- When appropriate, offer to create markdown after summarizing key points
+
 ## Examples
 
 **❌ Avoid**: Long paragraphs explaining context, history, or detailed rationale
 **❌ Avoid**: Multiple nested sections with extensive explanations
 **❌ Avoid**: Repeating the same information in different ways
+**❌ Avoid**: Creating markdown files for every discussion or analysis
+**❌ Avoid**: Writing markdown without asking user first
 
 **✅ Correct**: Concise rules that get straight to the point
 **✅ Correct**: Clear structure with essential information only
 **✅ Correct**: Brief examples that illustrate the rule
+**✅ Correct**: Direct responses with core points, markdown only when necessary
+**✅ Correct**: Summarize key points first, then ask "Would you like me to write detailed documentation to a markdown file?"
 
 When creating new cursor rules, reference existing rules in this directory as style examples.

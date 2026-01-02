@@ -1,0 +1,253 @@
+---
+alwaysApply: false
+title: Git Index Protection on macOS
+description: Solutions for preventing macOS fileproviderd from deleting .git/index files
+tags: [git, macos, troubleshooting, fileproviderd]
+version: 1.0.0
+created: 2025-12-29
+---
+
+# Git Index Protection on macOS
+
+## Problem Description
+
+### Symptoms
+- `.git/index` file is repeatedly deleted
+- `git status` shows all files as deleted
+- Issue occurs on macOS, especially in Desktop or iCloud-synced directories
+- Files named `.git/index 2` may appear
+
+### Root Cause Analysis
+
+**Key Finding**: `.git/index` has `com.apple.provenance` extended attribute
+
+1. **macOS File Provider System (`fileproviderd`)**
+   - Adds `com.apple.provenance` attribute to tracked files
+   - Monitors and manages files for cloud sync services
+   - Can be triggered when Finder accesses `.git` directory
+
+2. **Why Only `.git/index` is Deleted**
+   - `.git/index` is a frequently changing binary file
+   - Modified on every `git add`, `git commit`, `git status`
+   - `fileproviderd` misidentifies it as a temporary/cache file
+   - Other Git files (HEAD, config, refs) are relatively static
+
+3. **Trigger Conditions**
+   - `.DS_Store` exists in `.git` directory (Finder accessed it)
+   - Project located in Desktop or iCloud-synced folder
+   - Extended attributes present on `.git/index`
+
+## Solution Strategy
+
+### Core Principle
+**Prevent `fileproviderd` from tracking `.git/index` rather than moving the project**
+
+### Implementation Steps
+
+#### 1. Remove Tracking Attribute
+```bash
+cd <project-root>
+xattr -d com.apple.provenance .git/index 2>/dev/null || true
+```
+
+#### 2. Create Git Hooks for Auto-Cleanup
+
+**Post-Commit Hook** (`.git/hooks/post-commit`):
+```bash
+#!/bin/bash
+# Remove macOS file provider tracking from index after commit
+if [ -f .git/index ]; then
+    xattr -d com.apple.provenance .git/index 2>/dev/null || true
+fi
+```
+
+**Post-Rewrite Hook** (`.git/hooks/post-rewrite`):
+```bash
+#!/bin/bash
+# Remove macOS file provider tracking from index after rewrite operations
+if [ -f .git/index ]; then
+    xattr -d com.apple.provenance .git/index 2>/dev/null || true
+fi
+```
+
+**Post-Merge Hook** (`.git/hooks/post-merge`):
+```bash
+#!/bin/bash
+# Rebuild index if missing after merge
+if [ ! -f .git/index ]; then
+    echo "Rebuilding missing .git/index..."
+    git read-tree HEAD
+fi
+# Remove tracking attribute
+xattr -d com.apple.provenance .git/index 2>/dev/null || true
+```
+
+**Post-Checkout Hook** (`.git/hooks/post-checkout`):
+```bash
+#!/bin/bash
+# Rebuild index if missing after checkout
+if [ ! -f .git/index ]; then
+    echo "Rebuilding missing .git/index..."
+    git read-tree HEAD
+fi
+# Remove tracking attribute
+xattr -d com.apple.provenance .git/index 2>/dev/null || true
+```
+
+Make hooks executable:
+```bash
+chmod +x .git/hooks/post-commit
+chmod +x .git/hooks/post-rewrite
+chmod +x .git/hooks/post-merge
+chmod +x .git/hooks/post-checkout
+```
+
+#### 3. Clean Up Finder Artifacts (Optional)
+
+Remove existing `.DS_Store` from `.git` directory:
+```bash
+rm -f .git/.DS_Store
+```
+
+**Note**: `.gitignore` cannot prevent Finder from creating `.DS_Store` in `.git/` because:
+- `.git/` is Git's internal directory, never tracked by Git
+- `.gitignore` only affects working directory files
+- Finder operates at the filesystem level, independent of Git
+
+This step only reduces clutter; the real protection comes from Git hooks.
+
+#### 4. Add Time Machine Exclusion (Optional)
+```bash
+touch .git/.com.apple.timemachine.donotbackup
+```
+
+## Emergency Recovery
+
+### If `.git/index` is Deleted
+
+**Quick Fix**:
+```bash
+git read-tree HEAD
+```
+
+This rebuilds the index from the current HEAD commit.
+
+### Verify Index Status
+```bash
+# Check if index exists
+ls -la .git/index
+
+# Check for tracking attributes
+xattr -l .git/index
+
+# Should show no com.apple.provenance attribute
+```
+
+### Check for Duplicate Files
+```bash
+# Look for files like "index 2"
+ls -la .git/ | grep "index "
+
+# Remove if found
+rm ".git/index 2"
+```
+
+## Verification
+
+### Check Extended Attributes
+```bash
+xattr -l .git/index
+# Should return empty or no com.apple.provenance
+```
+
+### Monitor for Issues
+```bash
+# Watch for changes (requires fswatch)
+fswatch .git/index
+
+# Or use fs_usage (requires sudo)
+sudo fs_usage -w -f filesys | grep "\.git/index"
+```
+
+## Why This Solution Works
+
+1. **Targets Root Cause**: Removes the tracking marker that triggers deletion
+2. **Automated**: Git hooks handle cleanup automatically
+3. **Non-Invasive**: No need to move project or change workflow
+4. **Preventive**: Stops Finder from re-triggering the issue
+5. **Recoverable**: Hooks auto-rebuild if deletion occurs
+
+## Alternative Solutions (Not Recommended)
+
+### ❌ Moving Project from Desktop
+- **Why not**: Problem is not the location, but the tracking
+- User preference should be respected
+- Solution should fix the issue, not work around it
+
+### ❌ Using `chflags uchg` (Immutable Flag)
+- **Why not**: `fileproviderd` can remove the flag
+- Not persistent across file provider operations
+- Requires manual intervention
+
+### ❌ Continuous Monitoring Scripts
+- **Why not**: Resource intensive
+- Requires background process
+- Not integrated with Git workflow
+
+## Troubleshooting
+
+### If Issue Persists
+
+1. **Check if hooks are executable**:
+   ```bash
+   ls -l .git/hooks/post-*
+   ```
+
+2. **Verify attribute removal**:
+   ```bash
+   xattr -l .git/index
+   ```
+
+3. **Check for Finder access**:
+   ```bash
+   ls -la .git/.DS_Store
+   ```
+
+4. **Look for cloud sync conflicts**:
+   ```bash
+   find .git -name "*iCloud*" -o -name "* 2"
+   ```
+
+### Debug Commands
+
+```bash
+# Show all extended attributes in .git
+find .git -type f -exec xattr -l {} \; 2>/dev/null
+
+# Monitor file system activity
+sudo fs_usage -w -f filesys | grep "drowcoder"
+
+# Check which process is accessing .git
+sudo lsof +D .git/
+```
+
+## Best Practices
+
+1. **Never open `.git` in Finder**: Prevents `fileproviderd` tracking
+2. **Use terminal for Git operations**: Avoids GUI-triggered file provider activity
+3. **Keep hooks updated**: Ensure all Git hooks include attribute cleanup
+4. **Regular verification**: Periodically check for extended attributes
+
+## Related Issues
+
+- macOS file provider system interference with Git repositories
+- iCloud Drive conflicts with frequently changing files
+- Desktop folder synchronization issues
+- Extended attributes on binary files
+
+## References
+
+- macOS Extended Attributes: `man xattr`
+- Git Hooks: `man githooks`
+- File Provider Framework: Apple Developer Documentation
+- Git Index Format: `.git/index` binary structure

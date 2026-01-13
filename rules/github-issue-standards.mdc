@@ -1,0 +1,215 @@
+---
+alwaysApply: false
+description: GitHub issue creation standards
+---
+
+# GitHub Issue Creation Standards
+
+When creating GitHub issues, follow these formatting rules for titles and descriptions.
+
+## Issue Title Format
+
+### Core Principle
+**All issue titles must start with an emoji that represents the issue type.**
+
+### Emoji Guidelines
+
+#### **Bug Issues** 🐛
+- **Always use**: 🐛 for bug reports
+- **Format**: `🐛 {Brief description of the bug}`
+- **Example**: `🐛 BadRequestError: litellm.BadRequestError: OpenAIException - An assistant message with 'tool_calls' must be followed...`
+- **Example**: `🐛 Add error handling for litellm.completion() to ensure checkpoint saves error responses`
+
+#### **Feature Issues**
+- **Use context-appropriate emoji** that best represents the feature
+- **Common feature emojis**:
+  - ⚡️ Performance improvements
+  - 🎨 UI/UX enhancements
+  - 🔧 Configuration or tooling
+  - 📚 Documentation
+  - 🔒 Security features
+  - 🚀 New capabilities
+  - 🎯 Improvements or optimizations
+- **Format**: `{Emoji} {Brief description of the feature}`
+- **Example**: `⚡️ Enable Streaming Output in CLI`
+- **Example**: `📚 Enable Verbose Thinking Content in CLI`
+
+#### **Other Issue Types**
+- Choose the most appropriate emoji for the issue type
+- Examples: 🔄 (refactor), ♻️ (maintenance), 📝 (documentation), ⚠️ (warning/improvement)
+
+## Issue Description Format
+
+### Brief Description Requirements
+
+1. **Concise and Clear**: One to three sentences describing the issue
+2. **Context**: Include relevant code locations or file paths when applicable
+3. **Problem Statement**: Clearly state what the problem is or what needs to be implemented
+4. **Impact**: Briefly mention why this matters or what happens without the fix
+5. **Code Fragments**: When the issue involves specific code, include the relevant code block using code references format
+
+### Code Fragment Format
+
+When including code fragments in the description, use the code reference format:
+
+```
+```startLine:endLine:filepath
+// code content here
+```
+```
+
+This format provides direct links to the code in the repository and makes it easy for reviewers to locate the exact code in question.
+
+### Description Examples
+
+**Bug Example (with code fragment)**:
+```
+In `agent.py` lines 317-329, the `litellm.completion()` call and subsequent response/message processing lack error handling. If an exception occurs, the error response or message cannot be saved to `self.checkpoint`, resulting in loss of debugging information.
+
+```317:329:src/drowcoder/agent.py
+        response = litellm.completion(messages=messages, **completion_kwargs)
+        message = response.choices[0].message
+
+        if all(getattr(message, attr, None) is None for attr in ['content', 'tool_calls', 'thinking_blocks']):
+            finish_reason = response.choices[0].finish_reason or 'unknown'
+            message.content = f"Empty response. Finish reason: {finish_reason}"
+
+        self.messages.append(message.__dict__)
+
+        # look out -> message.__dict__ != message.to_dict()
+        self.checkpoint.messages.punch(message.to_dict())
+        self.checkpoint.raw_messages.punch(response.to_dict())
+        self.verbose_latest_message()
+```
+
+We should wrap this code in a try-except block to capture and persist error responses to the checkpoint.
+```
+
+**Feature Example**:
+```
+Add support for streaming output in the CLI to provide real-time feedback during agent execution. This will improve user experience by showing progress as it happens rather than waiting for complete responses.
+```
+
+## Issue Labels
+
+### Core Principle
+**Always suggest appropriate labels based on the issue type and content. Only use labels that exist in the repository.**
+
+### Available Labels
+
+The repository has the following labels available:
+- `bug` - Something isn't working
+- `documentation` - Improvements or additions to documentation
+- `duplicate` - This issue or pull request already exists
+- `enhancement` - New feature or request
+- `feature` - New feature or request
+- `good first issue` - Good for newcomers
+- `help wanted` - Extra attention is needed
+- `invalid` - This doesn't seem right
+- `question` - Further information is requested
+- `wontfix` - This will not be worked on
+
+### Label Guidelines
+
+#### **Bug Issues**
+- **Primary label**: `bug`
+- **Additional labels** (when applicable):
+  - `help wanted` - If the bug needs extra attention or community help
+  - `good first issue` - If the bug is suitable for newcomers
+
+#### **Feature Issues**
+- **Primary label**: `feature` or `enhancement` (both mean "New feature or request")
+- **Additional labels** (when applicable):
+  - `documentation` - If the feature involves documentation improvements
+  - `help wanted` - If the feature needs extra attention
+  - `good first issue` - If the feature is suitable for newcomers
+
+#### **Documentation Issues**
+- **Primary label**: `documentation`
+- **Additional labels** (when applicable):
+  - `enhancement` - If it's a new documentation feature
+  - `help wanted` - If documentation needs extra attention
+
+#### **Question Issues**
+- **Primary label**: `question`
+
+#### **Other Issue Types**
+- `duplicate` - For issues that already exist
+- `invalid` - For issues that don't seem right
+- `wontfix` - For issues that will not be worked on
+- `help wanted` - For any issue needing extra attention
+- `good first issue` - For issues suitable for newcomers
+
+### Label Selection Process
+
+1. **Identify primary label** based on issue type (bug, feature, documentation, question, etc.)
+2. **Add secondary labels** only if they add meaningful categorization
+3. **Use `help wanted`** when the issue needs extra attention or community contribution
+4. **Use `good first issue`** when the issue is suitable for newcomers
+5. **Keep labels relevant** - avoid over-labeling (typically 1-2 labels is sufficient)
+
+## Issue Creation Process
+
+1. **Determine issue type** (bug, feature, etc.)
+2. **Select appropriate emoji** based on type
+3. **Write concise title** starting with emoji
+4. **Provide brief description** with context, problem, and impact
+5. **Include code fragments** when the issue involves specific code (use code reference format)
+6. **Suggest appropriate labels** based on issue type and content
+7. **Include code references** (file paths, line numbers) when relevant
+
+## Complete Issue Examples
+
+### Bug Issue Example
+
+**Title**: `🐛 Handle early exceptions in litellm.completion() to ensure checkpoint saves error responses`
+
+**Brief Description**:
+```
+In `agent.py` lines 317-329, the `litellm.completion()` call and subsequent response/message processing lack error handling. If an exception occurs, the error response or message cannot be saved to `self.checkpoint`, resulting in loss of debugging information.
+
+```317:329:src/drowcoder/agent.py
+        response = litellm.completion(messages=messages, **completion_kwargs)
+        message = response.choices[0].message
+
+        if all(getattr(message, attr, None) is None for attr in ['content', 'tool_calls', 'thinking_blocks']):
+            finish_reason = response.choices[0].finish_reason or 'unknown'
+            message.content = f"Empty response. Finish reason: {finish_reason}"
+
+        self.messages.append(message.__dict__)
+
+        # look out -> message.__dict__ != message.to_dict()
+        self.checkpoint.messages.punch(message.to_dict())
+        self.checkpoint.raw_messages.punch(response.to_dict())
+        self.verbose_latest_message()
+```
+
+We should wrap this code in a try-except block to capture and persist error responses to the checkpoint.
+```
+
+**Suggested Labels**: `bug`
+
+### Feature Issue Example
+
+**Title**: `⚡️ Enable Streaming Output in CLI`
+
+**Brief Description**:
+```
+Add support for streaming output in the CLI to provide real-time feedback during agent execution. This will improve user experience by showing progress as it happens rather than waiting for complete responses.
+```
+
+**Suggested Labels**: `feature` or `enhancement`
+
+## Quick Reference
+
+**❌ Avoid**:
+- `Error handling needed in agent.py` (no emoji, no label suggestion)
+- `Add streaming support` (no emoji, no label suggestion)
+- `🐛bug: fix error` (poor formatting)
+
+**✅ Correct**:
+- Title with emoji: `🐛 Add error handling for litellm.completion() to ensure checkpoint saves error responses`
+- Brief description with context and impact
+- Suggested labels: `bug` (or `bug`, `help wanted` if needs extra attention)
+
+This standard ensures consistent, scannable, and informative issue titles that make it easy to identify issue types at a glance.

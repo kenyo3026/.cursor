@@ -1,0 +1,97 @@
+---
+alwaysApply: true
+description: License initialization policy for new projects
+---
+
+# Mermaid Architecture Diagram Style Guide (Abstract Version)
+
+## 🎯 Core Philosophy
+Generate clean, professional, and English-only architecture diagrams that distinguish between **Sequential Logic Flows** and **Static Resource Relationships**.
+
+## 🌐 Language Rule
+- **CRITICAL**: Use **English only** for all text (labels, subgraphs, annotations).
+
+## 🔢 Connection & Flow Logic
+- **Sequential Flow (Numbered)**: Use `<1>`, `<2>`, `<3>` for the main lifecycle of a request or process.
+  - Format: `A -->|<1> Trigger| B`
+- **Static/Parallel Relationships (Un-numbered)**: Use un-numbered arrows or dashed lines for persistent connections, background tasks, or resource usage.
+  - Format: `A -.->|Monitor| B` or `A -->|Access| Storage`
+
+## 🎨 Visual Identity (Color Scheme)
+Apply these classes to make diagrams instantly readable:
+
+```mermaid
+classDef gateway fill:#E74C3C,stroke:#A93226,stroke-width:2px,color:#fff
+classDef coreService fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+classDef infrastructure fill:#95A5A6,stroke:#7F8C8D,stroke-width:2px,color:#fff
+classDef storage fill:#9013FE,stroke:#6610B8,stroke-width:2px,color:#fff
+classDef resource fill:#50C878,stroke:#2D7A4A,stroke-width:2px,color:#fff
+classDef external fill:#F5A623,stroke:#C17D11,stroke-width:2px,color:#000
+```
+
+- **Red (gateway)**: Entry points, Proxies, Load Balancers.
+- **Blue (coreService)**: Business logic, Controllers, Managers.
+- **Gray (infrastructure)**: Underlying platforms (K8s, OS, Virtualization).
+- **Purple (storage)**: Databases, Persistent Volumes, Caches.
+- **Green (resource)**: Hardware resources, Workers, specialized nodes.
+- **Orange (external)**: Third-party APIs, Remote services.
+
+## 🏗️ Abstract Structural Template
+
+```mermaid
+flowchart TD
+    %% Nodes Definition
+    User((User/Client))
+    Entry[API Gateway/Entry Point]
+
+    subgraph "Logic Layer"
+        Orchestrator[Orchestrator/Controller]
+        Processor[Processing Engine]
+    end
+
+    subgraph "Infrastructure Layer"
+        Platform[Platform/Runtime]
+        Node1[Worker Node A]
+        Node2[Worker Node B]
+    end
+
+    subgraph "Data & Resources"
+        DB[(Database/Storage)]
+        Res[Compute Resources]
+    end
+
+    %% Sequential Flow (Numbered)
+    User -->|<1> Send Request| Entry
+    Entry -->|<2> Validate & Route| Orchestrator
+    Orchestrator -->|<3> Dispatch Task| Processor
+    Processor -->|<4> Execute on Runtime| Platform
+    Platform -->|<5> Allocate| Node1
+    Node1 -->|<6> Return Result| Entry
+
+    %% Static/Parallel Relationships (Un-numbered)
+    Orchestrator -.->|Sync State| DB
+    Node1 -->|Consumes| Res
+    Node2 -->|Consumes| Res
+    Platform -.->|Monitor Health| Orchestrator
+
+    %% Styling
+    class Entry gateway
+    class Orchestrator,Processor,Node1,Node2 coreService
+    class Platform infrastructure
+    class DB storage
+    class Res resource
+```
+
+## 📝 Best Practices Checklist
+- [ ] **Top-Down Layout**: Use `flowchart TD` by default.
+- [ ] **Grouping**: Use `subgraph` to isolate logical domains (e.g., "Data Plane" vs "Control Plane").
+- [ ] **Concise Labels**: Keep text to 2-4 words.
+- [ ] **Explicit Start/End**: Clearly mark the User or Trigger point.
+- [ ] **Style Coverage**: Ensure all major nodes have a defined class.
+
+## 💬 Interaction Protocol
+When asked to "Draw an architecture diagram":
+1. **Analyze**: Identify the main request flow and the static dependencies.
+2. **Abstract**: map project-specific terms to these standard architectural roles.
+3. **Render**: Provide the Mermaid code block directly in the chat.
+4. **Explain**: Briefly explain the numbered flow and key resource relationships.

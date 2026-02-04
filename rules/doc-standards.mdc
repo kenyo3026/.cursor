@@ -1,0 +1,56 @@
+---
+alwaysApply: true
+description: Documentation standards and policies for code development
+---
+
+# Documentation Standards
+
+## Core Principle
+
+**STRICTLY PROHIBITED: Never create documentation files (`.md`, `.markdown`, or other documentation formats) automatically after completing features, code changes, or implementations. Only create documentation files when explicitly requested by the user.**
+
+## Critical Rules
+
+### Absolute Prohibitions
+
+- **DO NOT** automatically create documentation files after implementing a feature
+- **DO NOT** automatically create documentation files after writing code
+- **DO NOT** create documentation files without explicit user request
+- **DO NOT** automatically create `README.md` updates
+- **DO NOT** automatically create documentation files as "follow-up" to code changes
+- **DO NOT** automatically create documentation files "to help explain" or "for reference"
+- **DO NOT** automatically create documentation files even if you think it would be helpful
+
+**Note**: These prohibitions apply to **automatic** creation only. If the user explicitly requests documentation, you may create it.
+
+### What to Do Instead
+
+- **Provide explanations directly in conversation**
+- **Summarize changes verbally in your response**
+- **Answer questions directly without creating files**
+- **Only mention documentation creation if user explicitly asks**
+
+### When Documentation Creation is Allowed
+
+**ONLY** create documentation files when the user explicitly requests documentation creation through direct commands or clear intent.
+
+**DO NOT** create documentation files as part of coding tasks. Documentation is separate from implementation, bug fixes, refactoring, or feature development. Even if documentation might be helpful, do not create it unless explicitly requested.
+
+## Examples
+
+**❌ STRICTLY FORBIDDEN**:
+- Implementing a feature → then creating `FEATURE.md`
+- Writing code → then creating `DOCUMENTATION.md`
+- Completing a task → then updating `README.md`
+- Fixing a bug → then creating `CHANGELOG.md`
+- Any automatic documentation creation after code changes
+
+**✅ CORRECT BEHAVIOR**:
+- Implement feature → explain in conversation only
+- Write code → summarize changes verbally
+- Complete task → respond with summary, no files
+- User asks "create docs" → then create documentation
+
+## Enforcement
+
+This rule must be followed **without exception**. If you are tempted to create a documentation file "to be helpful" or "for completeness", **STOP** and remember: **only create documentation when explicitly requested**.

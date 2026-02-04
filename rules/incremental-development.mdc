@@ -26,31 +26,6 @@ When generating new code, modules, or features, **start with core functionality 
 - Introduce advanced features as follow-up enhancements
 - Consider performance optimizations in later iterations
 
-### 4. **Environment Setup**
-Before executing commands for the first time in a session, **verify the current environment**:
-
-#### **Python Projects**
-- **Check for uv**: Look for `.uv` folder in workspace → try `uv run`
-- **Check for conda**: Look for `environment.yml` or `conda` → try `conda activate`
-- **Check for venv**: Look for `venv/` or `env/` folders → activate virtual environment
-- **Fallback**: Use system Python if no environment detected
-
-#### **Other Languages**
-- **Node.js/TypeScript**: Check for `package.json` → use `npm` or `yarn`
-- **Go**: Check for `go.mod` → use `go` commands
-- **Rust**: Check for `Cargo.toml` → use `cargo` commands
-
-#### **When Environment Setup Fails**
-If activation fails or environment is unclear:
-1. **Ask the user** about the preferred environment
-2. **Request environment name** (e.g., conda environment name)
-3. **Confirm setup** before proceeding with commands
-
-#### **Session Memory**
-- **Remember environment** once established in the current session
-- **Skip re-verification** for subsequent commands in the same conversation
-- **Re-check only** when switching projects or starting a new session
-
 ## Examples
 
 **❌ Avoid**: Creating a comprehensive solution with all features at once

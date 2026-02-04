@@ -1,0 +1,84 @@
+---
+alwaysApply: true
+description: Environment detection and activation standards before executing commands
+---
+
+# Environment Management Standards
+
+## Core Principle
+
+**Before executing any commands that require a specific runtime environment, detect and activate the appropriate environment based on the project's programming language and setup.**
+
+## Detection Strategy
+
+### Python Projects
+
+**Priority Order:**
+1. **uv**: Check for `.uv` folder → use `uv run <command>`
+2. **conda**: Check for `environment.yml` or `.conda` folder → activate conda environment
+3. **venv/virtualenv**: Check for `venv/`, `env/`, `.venv/` folders → activate virtual environment
+4. **poetry**: Check for `poetry.lock` → use `poetry run <command>`
+5. **pipenv**: Check for `Pipfile.lock` → use `pipenv run <command>`
+6. **Fallback**: Use system Python if no environment detected
+
+**Activation Commands:**
+- `source venv/bin/activate` (Linux/macOS)
+- `venv\Scripts\activate` (Windows)
+- `conda activate <env_name>`
+- `uv run <command>` (no activation needed)
+
+### Node.js/TypeScript Projects
+
+**Detection:**
+- Check for `package.json` → use `npm` or `yarn` commands
+- Check for `node_modules/` → dependencies installed
+- Check for `yarn.lock` → prefer `yarn`
+- Check for `pnpm-lock.yaml` → prefer `pnpm`
+
+**Commands:**
+- `npm run <script>` or `yarn <script>` or `pnpm <script>`
+- Install dependencies first if `node_modules/` missing: `npm install` / `yarn install` / `pnpm install`
+
+### Go Projects
+
+**Detection:**
+- Check for `go.mod` → use `go` commands directly
+- No environment activation needed (uses system Go)
+
+### Rust Projects
+
+**Detection:**
+- Check for `Cargo.toml` → use `cargo` commands
+- No environment activation needed (uses system Rust)
+
+## Execution Protocol
+
+### Before First Command in Session
+
+1. **Detect project type** by checking for language-specific files
+2. **Identify environment** using priority order above
+3. **Activate environment** if needed (except for `uv run`, `poetry run`, etc.)
+4. **Verify activation** by checking `which python` / `which node` / etc.
+
+### When Environment Setup Fails
+
+If activation fails or environment is unclear:
+1. **Ask user** about preferred environment
+2. **Request environment name** (e.g., conda environment name, venv path)
+3. **Confirm setup** before proceeding with commands
+
+### Session Memory
+
+- **Remember environment** once established in current session
+- **Skip re-verification** for subsequent commands in same conversation
+- **Re-check only** when switching projects or starting new session
+
+## Examples
+
+**❌ Avoid**: Running `python script.py` without checking for venv
+**❌ Avoid**: Running `pip install` in system Python when venv exists
+**❌ Avoid**: Assuming environment is already activated
+
+**✅ Correct**: Check for `venv/` → activate → then run commands
+**✅ Correct**: Use `uv run python script.py` when `.uv` folder exists
+**✅ Correct**: Ask user if environment detection is unclear

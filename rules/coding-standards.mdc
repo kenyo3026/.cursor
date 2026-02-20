@@ -1,12 +1,12 @@
 ---
 alwaysApply: true
-description: Code language standards for AI agent interactions
+description: Code language standards for AI agent interactions including English-only policy
 ---
 
 # Code Language Standards
 
-## English-Only Code Policy
-
+## 🌐 English-Only Code Policy
+**STRICT ENFORCEMENT REQUIRED:**
 All code blocks generated during Cursor agent interactions must strictly adhere to English-only standards.
 
 ### Requirements
@@ -16,3 +16,4 @@ All code blocks generated during Cursor agent interactions must strictly adhere 
 - Function/method documentation strings in English
 - Variable and function names in English
 - No non-English characters in code
+- No non-English explanations or text inside code blocks

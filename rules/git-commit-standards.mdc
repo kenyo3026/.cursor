@@ -33,6 +33,13 @@ When generating git commit messages, follow these strict formatting rules and ty
 - **Template**: `[DOCS] Update {filename}` for existing files
 - **Example**: `[DOCS] Update README.md`
 - **Example**: `[DOCS] Setup requirements.txt` (for new files)
+- **Docstring Rule**: **ALL** docstring-related commits (add, modify, fix, remove) must use `[DOCS]` type
+  - Adding docstrings: `[DOCS] Add docstring to {method/class}`
+  - Modifying docstrings: `[DOCS] Update docstring for {method/class}`
+  - Fixing docstrings: `[DOCS] Fix parameter names in {method} docstring`
+  - Removing docstrings: `[DOCS] Remove docstring from {method/class}`
+  - **Example**: `[DOCS] Fix parameter names in annotate method docstring`
+  - **Example**: `[DOCS] Add docstring to setup_annotator method`
 
 ### **STYLE** - Code Style
 - **Usage**: Formatting, whitespace, missing semicolons (no logic changes)

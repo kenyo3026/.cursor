@@ -1,0 +1,223 @@
+---
+alwaysApply: false
+description: Python project initialization standards covering pyproject.toml configuration and repository folder structure conventions
+---
+
+# Python Project Initialization Standards
+
+## Core Principles
+
+- Use modern `pyproject.toml` as single source of truth (NO `setup.py`)
+- Use `src-layout` structure for better isolation
+- Use `uv` as package manager
+- Support Python >= 3.8 or >= 3.11 depending on needs
+- Configure all tools in `pyproject.toml`
+
+---
+
+## 📁 Repository Structure (src-layout)
+
+```
+project-name/
+├── .cursor/rules/          # Cursor rules
+├── configs/                # YAML/JSON configs
+├── docs/                   # Documentation
+├── scripts/                # Utility scripts
+├── src/
+│   └── package_name/      # Main package (underscores)
+│       ├── __init__.py
+│       ├── cli.py         # CLI entry
+│       ├── main.py        # Core logic
+│       ├── app.py         # API entry (optional)
+│       ├── mcp.py         # MCP entry (optional)
+│       ├── module_name/   # Sub-modules
+│       │   ├── __init__.py
+│       │   └── *.py
+│       └── utils/
+│           ├── __init__.py
+│           └── *.py
+├── tests/                 # Test suite
+│   ├── conftest.py
+│   └── test_*.py
+├── .gitignore
+├── pyproject.toml
+├── README.md
+└── uv.lock
+```
+
+**Key Conventions:**
+- Package folder: `my_package` (underscores)
+- PyPI project name: `my-project` (hyphens)
+- Always include `__init__.py` in packages
+- Tests outside `src/` in separate `tests/`
+- NO LICENSE file unless explicitly requested
+
+---
+
+## 📋 pyproject.toml Template
+
+```toml
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "project-name"              # PyPI name (hyphens)
+version = "0.1.0"
+description = "Brief description"
+readme = "README.md"
+requires-python = ">=3.11"         # or ">=3.8"
+authors = [{name = "Name", email = "email@example.com"}]
+
+dependencies = [
+    "litellm>=1.80.11",
+    "rich>=13.0.0",
+    "pydantic>=2.0.0",
+]
+
+# Optional dependency groups (dev/test/api/mcp pattern)
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "black>=23.0.0", "mypy>=1.0.0"]
+test = ["pytest>=7.0.0", "pytest-cov>=4.0.0"]
+docs = ["sphinx>=5.0.0"]
+api = ["fastapi>=0.115.0", "uvicorn>=0.32.0"]
+mcp = ["fastmcp>=0.2.0"]
+
+# Multi-entry points pattern (cli/api/mcp)
+[project.scripts]
+project-name = "package_name.cli:main"
+project-name-api = "package_name.app:main"      # optional
+project-name-mcp = "package_name.mcp:main"      # optional
+
+# src-layout configuration
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-dir]
+"" = "src"
+
+[tool.setuptools.package-data]
+package_name = ["**/*.yaml", "**/*.json", "**/*.md"]
+
+[tool.setuptools]
+include-package-data = true
+
+# Git/Local dependencies
+[tool.uv.sources]
+config-morpher = { git = "https://github.com/user/repo.git" }
+# local-pkg = { path = "../local-pkg", editable = true }
+
+# Type checking configuration
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["litellm.*"]
+ignore_missing_imports = true
+
+# Testing configuration
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["--verbose", "--cov=package_name"]
+markers = ["slow: slow tests", "integration: integration tests"]
+```
+
+---
+
+## 🚨 Common Pitfalls
+
+| ❌ Wrong | ✅ Correct |
+|---------|-----------|
+| Package name: `my-package` (folder) | `my_package` (underscores) |
+| PyPI name: `my_package` | `my-project` (hyphens) |
+| Flat: `project/my_package/` | src-layout: `project/src/my_package/` |
+| Missing `requires-python` | Always specify `requires-python = ">=3.x"` |
+| `dependencies = ["pkg==1.2.3"]` | `dependencies = ["pkg>=1.2.0"]` (flexible) |
+| Mix `setup.py` + `pyproject.toml` | Only use `pyproject.toml` |
+| CLI: `mycli = "pkg.cli"` | `mycli = "pkg.cli:main"` (needs `:function`) |
+| Missing `__init__.py` | Always include in packages |
+
+---
+
+## 🎯 Initialization Checklist
+
+### Structure Setup
+- [ ] Create `src/package_name/` with `__init__.py`
+- [ ] Create `tests/`, `configs/`, `docs/`, `scripts/`
+- [ ] Create `.gitignore` (Python template)
+
+### Configuration
+- [ ] Create `pyproject.toml` with all sections
+- [ ] Set project name (hyphens) and package name (underscores)
+- [ ] Set `requires-python` (>=3.11 or >=3.8)
+- [ ] Add dependencies and optional groups
+- [ ] Configure CLI entry points
+- [ ] Configure tool sections (black, mypy, pytest)
+
+### Entry Points
+- [ ] Create `cli.py`, `main.py`, `app.py` (if needed), `mcp.py` (if needed)
+- [ ] Implement `main()` functions
+
+### Finalize
+- [ ] Create `README.md`
+- [ ] Create `configs/config.yaml`
+- [ ] Run `uv venv && source .venv/bin/activate`
+- [ ] Run `uv pip install -e ".[dev]"`
+- [ ] Verify: `package-name --help`
+
+---
+
+## 📦 Essential Commands
+
+```bash
+# Setup
+uv venv
+source .venv/bin/activate
+uv pip install -e ".[dev,test,api,mcp]"
+
+# Development
+pytest --cov=package_name
+black src/ tests/
+mypy src/
+isort src/ tests/
+
+# Run
+package-name --help
+```
+
+---
+
+## 🎨 Module Patterns
+
+### Pattern 1: Base + Implementations
+```
+implementation/
+├── __init__.py          # Export all
+├── base.py             # Abstract base
+├── impl1.py            # Implementation
+└── impl2.py
+```
+
+---
+
+## 📚 Dependency Reference
+
+**Common packages:**
+- `litellm>=1.80.11` - LLM APIs
+- `rich>=13.0.0` - Terminal UI
+- `pydantic>=2.0.0` - Validation
+- `pyyaml>=6.0` - YAML parsing
+- `fastapi>=0.115.0` + `uvicorn>=0.32.0` - API
+- `fastmcp>=0.2.0` - MCP server
+- `instructor>=1.0.0` - Structured outputs
+- `argilla>=2.8.0` - Data annotation
+- `aiohttp>=3.9.0` - Async HTTP
+
+**Dev tools:**
+- `pytest>=7.0.0` + `pytest-cov>=4.0.0` - Testing
+- `black>=23.0.0` - Formatting
+- `mypy>=1.0.0` - Type checking
+- `isort>=5.0.0` - Import sorting
+

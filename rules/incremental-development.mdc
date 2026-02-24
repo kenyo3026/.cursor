@@ -9,6 +9,10 @@ description: Incremental development approach for code generation
 
 When generating new code, modules, or features, **start with core functionality first, then gradually expand**.
 
+All implementations must:
+- **Align with system design** — Follow existing architecture, patterns, and conventions
+- **Apply minimal reasonable change** — Make the smallest change set that achieves the goal without unnecessary scope creep
+
 ## Implementation Strategy
 
 ### 1. **Start Simple**

@@ -4,6 +4,14 @@ description: Git commit message standards
 ---
 # Git Commit Message Standards
 
+## Core Principle: No Automatic Commits
+
+**STRICTLY PROHIBITED: Never automatically execute `git commit` commands unless explicitly requested by the user.**
+
+- **DO NOT** run `git commit` automatically after completing a task, feature, or bug fix.
+- **DO NOT** automatically stage and commit files.
+- **Default Behavior**: You must ONLY provide the suggested git commit message in the chat. The user prefers to review and execute the commit themselves.
+
 When generating git commit messages, follow these strict formatting rules and type definitions.
 
 ## Commit Message Format
@@ -79,7 +87,7 @@ When generating git commit messages, follow these strict formatting rules and ty
 - ✅ `Setup`, `Fix`, `Update`, `Remove`, `Implement`
 - ❌ `Adding`, `Fixed`, `Updates`, `Removed`
 - **Personal Preferences**:
-  - Use `Setup` instead of `Add` for initial feature/module creation
+  - **Avoid `Add`** — prefer more specific verbs (e.g. `Setup`, `Show`, `Display`, `Implement`, `Introduce`) depending on context; `Setup` for initial creation, `Show`/`Display` for UI feedback, etc.
   - Use `Remove unused {type}` for cleanup tasks
 
 ### 2. **Use Present Tense**
@@ -100,7 +108,7 @@ When analyzing code diffs to generate commit messages:
 
 1. **Identify the primary change type** based on the diff content
 2. **Determine the main component** being modified (agent, tools, config, etc.)
-3. **Choose appropriate action verb** (add, fix, update, remove, etc.)
+3. **Choose appropriate action verb** (avoid `Add`; use Show, Fix, Update, Remove, Implement, etc.)
 4. **Write concise description** focusing on the most significant change
 5. **Format according to the standard**: `[TYPE] Verb description`
 

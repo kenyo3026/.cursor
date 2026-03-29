@@ -66,7 +66,7 @@ This format provides direct links to the code in the repository and makes it eas
 ```
 In `agent.py` lines 317-329, the `litellm.completion()` call and subsequent response/message processing lack error handling. If an exception occurs, the error response or message cannot be saved to `self.checkpoint`, resulting in loss of debugging information.
 
-```317:329:src/drowcoder/agent.py
+```317:329:src/drowdroid/agent.py
         response = litellm.completion(messages=messages, **completion_kwargs)
         message = response.choices[0].message
 
@@ -168,7 +168,7 @@ The repository has the following labels available:
 ```
 In `agent.py` lines 317-329, the `litellm.completion()` call and subsequent response/message processing lack error handling. If an exception occurs, the error response or message cannot be saved to `self.checkpoint`, resulting in loss of debugging information.
 
-```317:329:src/drowcoder/agent.py
+```317:329:src/drowdroid/agent.py
         response = litellm.completion(messages=messages, **completion_kwargs)
         message = response.choices[0].message
 

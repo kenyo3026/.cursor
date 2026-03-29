@@ -225,7 +225,7 @@ sudo fs_usage -w -f filesys | grep "\.git/index"
 find .git -type f -exec xattr -l {} \; 2>/dev/null
 
 # Monitor file system activity
-sudo fs_usage -w -f filesys | grep "drowcoder"
+sudo fs_usage -w -f filesys | grep "drowdroid"
 
 # Check which process is accessing .git
 sudo lsof +D .git/

@@ -51,6 +51,34 @@ Example:
    - Format: `- {Technical detail or improvement}`
    - Keep descriptions concise and technical
 
+### Patch Version (X.Y.Z) Release Notes
+
+For patch releases (e.g., v0.2.1, v0.3.1), keep the release note minimal:
+
+1. **Title**: `# vX.Y.Z - 🐛 {Short Description}`
+2. **Brief Description**: One sentence only
+3. **Bug Fixes Section** only — no Core Features or Technical Highlights sections:
+   ```markdown
+   ### 🐛 Bug Fixes
+   - **Fix** {description}
+   ```
+4. Omit Technical Highlights unless there is a non-trivial structural change
+
+Example:
+```markdown
+# vX.Y.Z - 🐛 {Component} Bug Fixes
+
+## 📝 Release Notes
+
+Patch release addressing bugs found in vX.Y.0.
+
+### 🐛 Bug Fixes
+
+- **Fix** {serialization issue description}
+- **Fix** {lookup / resolution issue description}
+- **Fix** {import / dependency issue description}
+```
+
 ### Content Guidelines
 
 1. **Feature Descriptions**:

@@ -1,0 +1,45 @@
+---
+alwaysApply: false
+description: Personal engineering preferences — data modeling, commits, working method, testing, try-run notebooks. Additive to coding-standards / git-commit-standards / incremental-development.
+---
+
+# Engineering Preferences
+
+Additive to the other rules; captures the easy-to-forget choices.
+
+## Data modeling
+- Prefer `@dataclass` over `Enum` for fixed constant vocabularies. For **open /
+  version-dependent** vocabularies keep raw strings + a default fallback — never crash
+  on an unseen value.
+- Prefer `@dataclass` over pydantic. Use pydantic **only** where a framework forces it
+  (e.g. FastAPI request body), confined to that adapter; never as the domain model.
+- Registry / strategy selection: frozen-dataclass registry (name → class or instance) +
+  `getattr(Registry, name.upper())`, **raise on unknown** (no silent fallback).
+
+## Commits
+- Describe the change in **natural language, not code identifiers**.
+  ✅ `[FEAT] Implement block read with surrounding context`
+  ❌ `[FEAT] Implement read_block_with_context`
+- Otherwise follow git-commit-standards (`[TYPE]`, avoid `Add`, < 72 chars).
+
+## Working method
+- Verify each step against **real data** before moving on — run it, eyeball the result.
+- For a library's schema/contract, **trace its source** (type defs + construction code),
+  don't infer from samples; official docs are often a lossy/stale subset.
+
+## Testing
+- Prefer **self-contained synthetic fixtures** built in a temp dir over real-corpus
+  paths — fast, deterministic, survive corpus/dir moves. Cover branches, not volume.
+- Class-based `TestXxx`, one assertion-focused method per behaviour.
+
+## Try-run notebooks
+- One scratch notebook per feature/stage in `notebooks/`; keep `*.ipynb` gitignored.
+- With an editable install, import the package directly — **no `sys.path` hack**;
+  kernel = project `.venv`.
+- After writing/editing a notebook, **verify it**: JSON loads + run the cell code under
+  the venv python (don't rely on headless `nbconvert` — often absent).
+- Edit notebooks with the **NotebookEdit** tool (cell-id based), not a text edit.
+
+## Definition of done (per unit)
+core/logic → surfaced on every relevant interface → unit test → (optional) notebook.
+Don't let the core gain capabilities the interfaces never expose.

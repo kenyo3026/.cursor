@@ -1,0 +1,49 @@
+---
+alwaysApply: false
+description: Versioning and tagging Docker images from git
+---
+
+# Docker Image Versioning
+
+## Core Principle
+
+**Never hardcode a version in compose/Dockerfile. Parameterize the tag (default `latest`) and stamp the real version from git at build time.** Dev builds stay `latest`; release builds carry the git version. The compose file is written once and never edited per release.
+
+## Tag scheme (computed from git)
+
+- HEAD is exactly on a tag → use the tag (`git describe --tags --exact-match`)
+- otherwise → `sha-<8>` (`git rev-parse --short=8 HEAD`)
+- working tree dirty (tracked or untracked) → append `-dirty` (`git status --porcelain` non-empty)
+
+## compose
+
+```yaml
+services:
+  myapp:
+    image: myapp:${VERSION:-latest}   # default latest; build feeds VERSION
+    build: ...
+```
+
+## Makefile (compose can't run git, so compute outside and pass it in)
+
+```makefile
+VERSION := $(shell \
+	v=$$(git describe --tags --exact-match 2>/dev/null || echo sha-$$(git rev-parse --short=8 HEAD)); \
+	[ -z "$$(git status --porcelain)" ] || v=$$v-dirty; \
+	echo $$v)
+
+build:
+	VERSION=$(VERSION) docker compose build
+```
+
+- `docker compose build` (no make) → `:latest`
+- `make build` → `:v0.1.0` on a tagged commit, else `:sha-1a2b3c4d`, else `...-dirty`
+
+## CI (the canonical source of truth is the git tag)
+
+- Build/push release images in CI, not from a dev box.
+- Derive tags from the git ref (`docker/metadata-action` on GitHub Actions): a real tag → `:1.2.3` + `:latest`; branch/PR → `:main` / `:sha-…`.
+- Reuse the same git-version logic as the Makefile so local and CI agree.
+
+❌ Avoid: editing `image:` per release, or shipping only `:latest` (unpinnable, not reproducible).
+✅ Correct: one parameterized `image:`, version injected from git, releases tagged both `:X.Y.Z` and `:latest`.

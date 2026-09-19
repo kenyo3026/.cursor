@@ -51,7 +51,23 @@ Example:
    - Format: `- {Technical detail or improvement}`
    - Keep descriptions concise and technical
 
-### Patch Version (X.Y.Z) Release Notes
+### Versioning Policy: Decide Per Project at the Start
+
+Two conventions are both common in the wild. Pick one when the project starts and stay consistent; the choice decides what a patch release note may contain.
+
+| | Strict semver | Loose |
+|---|---|---|
+| MINOR (`x.Y.0`) | new features | new features |
+| PATCH (`x.y.Z`) | **bug fixes only** | "another release" — features allowed |
+| Version number tells you | whether an upgrade can change behavior | only that time passed |
+| Seen in | most Python libraries; otterscale (features go to minor, rc/ea pre-releases before each) | Dify (1.17.1 shipped 13 features next to 87 fixes) |
+
+- Default for these projects: **strict semver** — the patch section below assumes it.
+- If a project chooses loose, patch release notes use the full Core Features / Technical Highlights layout instead of the Bug Fixes-only layout.
+- Pre-release suffixes (`-rc.N`, `-ea.N`) are for handing a build to other people first; a single-user project skips them.
+- Record the choice in the project's README or first release note so it is not re-decided later.
+
+### Patch Version (X.Y.Z) Release Notes — strict semver
 
 For patch releases (e.g., v0.2.1, v0.3.1), keep the release note minimal:
 

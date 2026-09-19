@@ -94,6 +94,16 @@ When generating git commit messages, follow these strict formatting rules and ty
 - ✅ `[FIX] Handle timeout errors in API requests`
 - ❌ `[FIX] Handled timeout errors in API requests`
 
+### 3. **Engineering Register**
+- Write the message as an engineering statement: `Verb + component + operation`
+- ❌ Pronouns and conversational connectives: `them`, `it`, `and write only inside them`
+- ❌ Commas and colons inside the message
+- ✅ `[FEAT] Implement gap detection and gap-bounded writes for backfill`
+- ❌ `[FEAT] Detect coverage gaps between runs and write only inside them`
+- **Component names**: plain lowercase prose as the history uses them (`collector`, `Shioaji provider`, `storage`, `Makefile`), not class identifiers; use `ShioajiProvider` / `SqliteStorage` only when the identifier itself is the subject (a rename, a signature change)
+- ✅ `[FIX] Drop the client on logout failure in Shioaji provider`
+- ❌ `[FIX] Drop the client on logout failure in ShioajiProvider`
+
 ### 4. **Keep Under 72 Characters**
 - Aim for concise but descriptive messages
 - Focus on the most important change
